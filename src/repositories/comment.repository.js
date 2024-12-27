@@ -5,6 +5,14 @@ export const addComment = async (data) => {
   await prisma.comment.create({ data: data });
 };
 
+export const getCommentFk = async (userId, artworkId) => {
+  const comment = await prisma.comment.findFirst({
+    where: { artworkId: artworkId, userId: userId },
+  });
+
+  return comment;
+};
+
 export const getCommentById = async (commentId) => {
   const comment = await prisma.comment.findFirst({ where: { id: commentId } });
 

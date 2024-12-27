@@ -3,6 +3,7 @@ import { getArtworkByID } from "../repositories/artwork.repository.js";
 import {
   addComment,
   getCommentById,
+  getCommentFk,
   likeComment,
 } from "../repositories/comment.repository.js";
 import { getUserByID } from "../repositories/user.repository.js";
