@@ -8,10 +8,10 @@ import {
   getCommentsByTime,
   likeComment,
 } from "../repositories/comment.repository.js";
-import { getUserByID } from "../repositories/user.repository.js";
+import { getUserById } from "../repositories/user.repository.js";
 
 export const commentAdd = async (data) => {
-  const user = await getUserByID(data.userId);
+  const user = await getUserById(data.userId);
 
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다");
@@ -39,7 +39,7 @@ export const commentAdd = async (data) => {
 };
 
 export const commentLike = async (data) => {
-  const user = await getUserByID(data.userId);
+  const user = await getUserById(data.userId);
 
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
