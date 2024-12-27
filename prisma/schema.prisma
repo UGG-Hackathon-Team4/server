@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User  {
+  id        BigInt   @id @default(autoincrement())
+  name      String?  @db.VarChar(10)
+  gender    String?  @db.VarChar(255)
+  updatedAt DateTime? @db.DateTime(6)
+  createdAt DateTime? @db.DateTime(6)
+  
+  comments  Comment[]
+  likes     Like[]
+
+   @@map("users")
+}
+
+model Artwork {
+  id          BigInt   @id @default(autoincrement())
+  title       String?  @db.VarChar(255)
+  description String?  @db.Text
+  galleryId   BigInt
+  
+  gallery     Gallery  @relation(fields: [galleryId], references: [id])
+  comments    Comment[]
+  images      Image[]
+}
+
+model Comment {
+  id          String   @id @db.VarChar(255)
+  description String?  @db.Text
+  createdAt   DateTime? @db.DateTime(6)
+  updatedAt   DateTime? @db.DateTime(6)
+  userId      BigInt
+  artworkId   BigInt
+
+  user        User     @relation(fields: [userId], references: [id])
+  artwork     Artwork  @relation(fields: [artworkId], references: [id])
+  likes       Like[]
+}
+
+model Gallery {
+  id        BigInt   @id @default(autoincrement())
+  title     String?  @db.VarChar(255)
+  location  String?  @db.VarChar(255)
+  startDate DateTime? @db.DateTime(6)
+  endDate   DateTime? @db.DateTime(6)
+
+  artworks  Artwork[]
+}
+
+model Like {
+  id        BigInt  @id @default(autoincrement())
+  userId    BigInt
+  commentId String
+
+  user      User     @relation(fields: [userId], references: [id])
+  comment   Comment  @relation(fields: [commentId], references: [id])
+}
+
+model Image {
+  id        BigInt   @id @default(autoincrement())
+  url       String?  @db.VarChar(255)
+  artworkId BigInt
+
+  artwork   Artwork  @relation(fields: [artworkId], references: [id])
+}
