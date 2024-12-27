@@ -1,4 +1,4 @@
-import { addComment } from "../repositories/comment.repository.js";
+import { addComment, likeComment } from "../repositories/comment.repository.js";
 
 export const commentAdd = async (data) => {
   await addComment({
@@ -8,4 +8,11 @@ export const commentAdd = async (data) => {
   });
 
   return { data };
+};
+
+export const commentLike = async (data) => {
+  return await likeComment({
+    userId: data.userId,
+    commentId: data.commentId,
+  });
 };
