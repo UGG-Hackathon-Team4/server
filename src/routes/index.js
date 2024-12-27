@@ -5,7 +5,10 @@ import {
   handlecommentByTime,
   handleCommentLike,
 } from "../controllers/comment.controller.js";
-import { handleGalleryAdd } from "../controllers/user.controller.js";
+import {
+  handleGalleryAdd,
+  handleGetGallery,
+} from "../controllers/user.controller.js";
 
 const router = express.Router();
 
@@ -15,5 +18,6 @@ router.get("/comment/likes", handlecommentByLike);
 router.get("/comment/time", handlecommentByTime);
 
 router.post("/user/gallery", handleGalleryAdd);
+router.get("/user/gallerys", handleGetGallery);
 
 export default router;
