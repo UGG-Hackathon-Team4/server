@@ -42,3 +42,37 @@ export const likeComment = async (data) => {
 
   return { message: "좋아요를 눌렀습니다!", count };
 };
+export const getCommentsByLikes = async () => {
+  const comments = await prisma.comment.findMany({
+    include: {
+      user: true,
+      artwork: true,
+      _count: {
+        select: { likes: true },
+      },
+    },
+    orderBy: {
+      likes: {
+        _count: "desc",
+      },
+    },
+  });
+
+  return comments;
+};
+export const getCommentsByTime = async () => {
+  const comments = await prisma.comment.findMany({
+    include: {
+      user: true,
+      artwork: true,
+      _count: {
+        select: { likes: true },
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  return comments;
+};
