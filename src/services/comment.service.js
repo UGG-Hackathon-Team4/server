@@ -4,6 +4,8 @@ import {
   addComment,
   getCommentById,
   getCommentFk,
+  getCommentsByLikes,
+  getCommentsByTime,
   likeComment,
 } from "../repositories/comment.repository.js";
 import { getUserByID } from "../repositories/user.repository.js";
@@ -27,6 +29,7 @@ export const commentAdd = async (data) => {
   }
 
   await addComment({
+    //방문기록
     userId: data.userId,
     artworkId: data.artworkId,
     description: data.description,
@@ -52,4 +55,10 @@ export const commentLike = async (data) => {
     userId: data.userId,
     commentId: data.commentId,
   });
+};
+export const getCommentByLike = async () => {
+  return await getCommentsByLikes();
+};
+export const getCommentByTime = async () => {
+  return await getCommentsByTime();
 };
