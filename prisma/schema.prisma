@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,66 +7,70 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User  {
-  id        Int   @id @default(autoincrement())
-  name      String?  @db.VarChar(10)
-  gender    String?  @db.VarChar(255)
-  updatedAt DateTime? @db.DateTime(6)
-  createdAt DateTime? @db.DateTime(6)
-  
-  comments  Comment[]
-  likes     Like[]
+model User {
+  id            Int           @id @default(autoincrement())
+  name          String?       @db.VarChar(10)
+  gender        String?       @db.VarChar(255)
+  updatedAt     DateTime?     @db.DateTime(6) @default(now())
+  createdAt     DateTime?     @db.DateTime(6) @default(now())
+  comments      Comment[]
+  likes         Like[]
+  userGalleries UserGallery[]
+}
 
-   @@map("users")
+model UserGallery {
+  userId            Int
+  galleryId         Int
+  partcipation_date DateTime?  @db.DateTime(6) @default(now())
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gallery           Gallery    @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+
+  @@id([userId, galleryId])
 }
 
 model Artwork {
-  id          Int   @id @default(autoincrement())
-  title       String?  @db.VarChar(255)
-  description String?  @db.Text
+  id          Int       @id @default(autoincrement())
+  title       String?   @db.VarChar(255)
+  description String?   @db.Text
   galleryId   Int
-  
-  gallery     Gallery  @relation(fields: [galleryId], references: [id])
+  gallery     Gallery   @relation(fields: [galleryId], references: [id], onDelete: Cascade)
   comments    Comment[]
   images      Image[]
 }
 
 model Comment {
-  id          Int   @id @default(autoincrement())
-  description String?  @db.Text
-  createdAt   DateTime? @db.DateTime(6)  @default(now()) 
-  updatedAt   DateTime? @db.DateTime(6)  @default(now())
+  id          Int       @id @default(autoincrement())
+  description String?   @db.Text
+  createdAt   DateTime? @db.DateTime(6) @default(now())
+  updatedAt   DateTime? @db.DateTime(6) @default(now())
   userId      Int
   artworkId   Int
-
-  user        User     @relation(fields: [userId], references: [id])
-  artwork     Artwork  @relation(fields: [artworkId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  artwork     Artwork   @relation(fields: [artworkId], references: [id], onDelete: Cascade)
   likes       Like[]
 }
 
 model Gallery {
-  id        Int   @id @default(autoincrement())
-  title     String?  @db.VarChar(255)
-  location  String?  @db.VarChar(255)
-  startDate DateTime? @db.DateTime(6)
-  endDate   DateTime? @db.DateTime(6)
-
-  artworks  Artwork[]
+  id            Int           @id @default(autoincrement())
+  title         String?       @db.VarChar(255)
+  location      String?       @db.VarChar(255)
+  startDate     DateTime?     @db.DateTime(6)
+  endDate       DateTime?     @db.DateTime(6)
+  artworks      Artwork[]
+  userGalleries UserGallery[]
 }
 
 model Like {
-  id        Int  @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   userId    Int
   commentId Int
-
-  user      User     @relation(fields: [userId], references: [id])
-  comment   Comment  @relation(fields: [commentId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
 }
 
 model Image {
-  id        Int   @id @default(autoincrement())
-  url       String?  @db.VarChar(255)
+  id        Int     @id @default(autoincrement())
+  url       String? @db.VarChar(255)
   artworkId Int
-
-  artwork   Artwork  @relation(fields: [artworkId], references: [id])
+  artwork   Artwork @relation(fields: [artworkId], references: [id], onDelete: Cascade)
 }

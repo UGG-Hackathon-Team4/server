@@ -5,6 +5,14 @@ export const addComment = async (data) => {
   await prisma.comment.create({ data: data });
 };
 
+export const getCommentFk = async (userId, artworkId) => {
+  const comment = await prisma.comment.findFirst({
+    where: { artworkId: artworkId, userId: userId },
+  });
+
+  return comment;
+};
+
 export const getCommentById = async (commentId) => {
   const comment = await prisma.comment.findFirst({ where: { id: commentId } });
 
@@ -33,4 +41,38 @@ export const likeComment = async (data) => {
   });
 
   return { message: "좋아요를 눌렀습니다!", count };
+};
+export const getCommentsByLikes = async () => {
+  const comments = await prisma.comment.findMany({
+    include: {
+      user: true,
+      artwork: true,
+      _count: {
+        select: { likes: true },
+      },
+    },
+    orderBy: {
+      likes: {
+        _count: "desc",
+      },
+    },
+  });
+
+  return comments;
+};
+export const getCommentsByTime = async () => {
+  const comments = await prisma.comment.findMany({
+    include: {
+      user: true,
+      artwork: true,
+      _count: {
+        select: { likes: true },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return comments;
 };
