@@ -70,7 +70,7 @@ export const getCommentsByTime = async () => {
       },
     },
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
     },
   });
 
