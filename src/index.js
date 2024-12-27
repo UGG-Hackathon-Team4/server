@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
 import mainRouter from "./routes/index.js";
-import { prisma } from "./db.config.js";
 
 dotenv.config();
 
@@ -11,10 +10,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-  console.log("연결됨");
-  res.send("ugg team4 서버");
-});
+
 
 app.use("/api/v1", mainRouter);
 
