@@ -1,9 +1,8 @@
 import express from "express";
+import { handleCommentAdd } from "../controllers/comment.controller.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("api/v1 경로입니다");
-});
+router.post("/comment/add", handleCommentAdd);
 
 export default router;
